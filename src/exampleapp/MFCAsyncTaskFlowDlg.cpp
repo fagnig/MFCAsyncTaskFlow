@@ -17,6 +17,8 @@
 #include <sstream>
 #include <iostream>
 
+#include "fmt/core.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -74,13 +76,15 @@ void CMFCAsyncTaskFlowDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STARTWORK, m_buttonStartWork);
 	DDX_Control(pDX, IDC_FILEBROWSE, m_ctrlFileBrowse);
 	DDX_Control(pDX, IDC_WORDTOFIND, m_editWordToFind);
+	DDX_Control(pDX, IDC_LOGLIST, m_listLog);
 }
 
 BEGIN_MESSAGE_MAP(CMFCAsyncTaskFlowDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_STARTWORK, &CMFCAsyncTaskFlowDlg::OnBnClickedStartWork1)
+	ON_WM_GETMINMAXINFO()
+	ON_BN_CLICKED(IDC_STARTWORK, &CMFCAsyncTaskFlowDlg::OnBnClickedStartWork)
 END_MESSAGE_MAP()
 
 
@@ -115,9 +119,19 @@ BOOL CMFCAsyncTaskFlowDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
+	//Set minimum size of the window
+	CRect rect;
+	GetWindowRect(&rect);
+	m_iSizeMinX = rect.Width();
+	m_iSizeMinY = rect.Height();
+
 	SetWindowText(L"Async Taskflow Prototype");
 
 	m_ctrlFileBrowse.EnableFileBrowseButton();
+
+	m_listLog.ModifyStyle(0,LVS_LIST);
+	//m_listLog.GetClientRect(&rect);
+	//m_listLog.SetColumnWidth(0,rect.Width());
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -226,7 +240,7 @@ void workerThread(const std::filesystem::path& file, const std::string& wordtofi
 		ctrl->UpdateResult(wordsfound);
 }
 
-void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork1()
+void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
 {
 	std::vector<XIAsyncProgressUpdateable *> updateables;
 	updateables.push_back((XIAsyncProgressUpdateable *)&m_ctrlProgressBar);
@@ -242,4 +256,15 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork1()
 
 	std::thread worker(workerThread, filepath, wordtofind, updateables);
 	worker.detach();
+
+	std::string str = fmt::format("Started searching '{}' for the word '{}'", filepath.generic_string(), wordtofind);
+	std::wstring wstr = ATL::CA2W(str.c_str());
+	m_listLog.InsertItem(m_listLog.GetItemCount(), wstr.c_str());
 }
+
+void CMFCAsyncTaskFlowDlg::OnGetMinMaxInfo(MINMAXINFO * lpMMI)
+{
+	lpMMI->ptMinTrackSize.x = m_iSizeMinX;
+	lpMMI->ptMinTrackSize.y = m_iSizeMinY;
+}
+
