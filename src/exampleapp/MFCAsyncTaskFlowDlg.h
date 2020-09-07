@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "CProgressBarUpdateAble.h"
-#include "CButtonUpdateable.h"
+#include "controls/CProgressBarUpdateAble.h"
+#include "controls/CButtonUpdateable.h"
 
 
 // CMFCAsyncTaskFlowDlg dialog

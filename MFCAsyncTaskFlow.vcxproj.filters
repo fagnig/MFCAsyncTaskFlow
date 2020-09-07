@@ -13,14 +13,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{204086ed-a576-4eec-b2b0-22048902b595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\exampleapp">
+      <UniqueIdentifier>{bfd1d689-6bcc-444b-884e-d0583de7a04b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\controls">
+      <UniqueIdentifier>{4817e634-1c0f-43b6-a737-9f159563bb3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\interface">
+      <UniqueIdentifier>{ac63d489-e51d-4216-95ef-69f2033194b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MFCAsyncTaskFlow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MFCAsyncTaskFlowDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -33,31 +39,37 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CProgressBarUpdateAble.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\exampleapp\MFCAsyncTaskFlow.h">
+      <Filter>src\exampleapp</Filter>
     </ClInclude>
-    <ClInclude Include="XIAsyncProgressUpdateable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\exampleapp\MFCAsyncTaskFlowDlg.h">
+      <Filter>src\exampleapp</Filter>
     </ClInclude>
-    <ClInclude Include="CButtonUpdateable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\controls\CButtonUpdateable.h">
+      <Filter>src\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\controls\CProgressBarUpdateAble.h">
+      <Filter>src\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\interface\XIAsyncProgressUpdateable.h">
+      <Filter>src\interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MFCAsyncTaskFlow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MFCAsyncTaskFlowDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CProgressBarUpdateAble.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\exampleapp\MFCAsyncTaskFlow.cpp">
+      <Filter>src\exampleapp</Filter>
     </ClCompile>
-    <ClCompile Include="CButtonUpdateAble.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\exampleapp\MFCAsyncTaskFlowDlg.cpp">
+      <Filter>src\exampleapp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controls\CButtonUpdateAble.cpp">
+      <Filter>src\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controls\CProgressBarUpdateAble.cpp">
+      <Filter>src\controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

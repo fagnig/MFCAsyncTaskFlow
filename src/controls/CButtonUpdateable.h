@@ -1,6 +1,6 @@
 #pragma once
 
-#include "XIAsyncProgressUpdateable.h"
+#include "interface/XIAsyncProgressUpdateable.h"
 
 class CButtonUpdateAble : public CButton, XIAsyncProgressUpdateable
 {
