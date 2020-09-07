@@ -1,0 +1,2 @@
+C:\Users\jomot\source\repos\MFCAsyncTaskFlow\Debug\MFCAsyncTaskFlow.exe
+C:\Users\jomot\source\repos\MFCAsyncTaskFlow\Debug\MFCAsyncTaskFlow.pdb
