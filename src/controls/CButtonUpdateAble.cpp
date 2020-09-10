@@ -18,13 +18,7 @@ void CButtonUpdateAble::UpdateProgress(std::any in)
 
 void CButtonUpdateAble::UpdateResult(std::any in) 
 {
-  const auto res = std::any_cast<int>(in);
-
   EnableWindow( true );
 
-  std::wstring str = L"Found ";
-  str.append(std::to_wstring(res));
-  str.append(L" results.");
-
-  SetWindowText(str.c_str());
+  SetWindowText(L"Start");
 }

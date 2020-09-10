@@ -28,6 +28,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="lib\fmt">
+      <UniqueIdentifier>{a955f883-d342-401e-913c-0b4bd33c9db7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utility">
+      <UniqueIdentifier>{284fa840-dee9-436b-baca-e702f8c0c37d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -58,40 +64,46 @@
       <Filter>src\interface</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\chrono.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\color.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\compile.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\core.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\format.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\format-inl.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\locale.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\os.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\ostream.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\posix.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\printf.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\ranges.h">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\controls\CListCtrlUpdateAble.h">
+      <Filter>src\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utility\UpdateableContainer.h">
+      <Filter>src\utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -111,10 +123,16 @@
       <Filter>src\controls</Filter>
     </ClCompile>
     <ClCompile Include="lib\fmt\format.cc">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
     </ClCompile>
     <ClCompile Include="lib\fmt\os.cc">
-      <Filter>lib</Filter>
+      <Filter>lib\fmt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controls\CListCtrlUpdateAble.cpp">
+      <Filter>src\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\UpdateableContainer.cpp">
+      <Filter>src\utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
