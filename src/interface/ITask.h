@@ -12,11 +12,9 @@
 /// </summary>
 class ITask
 {
-  enum class TaskStatus { NOT_RUN, RUNNING, HALTED, STOPPING, STOPPED, FINISHED };
-
  public:
-  void RunTask(std::string id);
 
+  enum class TaskStatus { NOT_RUN, RUNNING, HALTED, STOPPING, STOPPED, FINISHED };
   TaskStatus GetStatus() { return m_status; };
 
   // Interface part starts here
@@ -24,7 +22,7 @@ class ITask
   virtual void StopTask() = 0;
   virtual void HaltTask() = 0;
 
- private:
+ protected:
   std::unordered_map<std::string, std::tuple<std::function<bool(std::vector<std::any>, UpdateableContainer)>, std::vector<std::any>, UpdateableContainer>> m_tasks;
 
 
@@ -33,5 +31,4 @@ class ITask
   TaskStatus m_status{TaskStatus::NOT_RUN};
   bool m_stoptoken{false};
 
-  std::unordered_map<std::string, std::thread> m_taskPool;
 };

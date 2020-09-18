@@ -114,6 +114,9 @@
     <ClInclude Include="src\interface\ITask.h">
       <Filter>src\interface</Filter>
     </ClInclude>
+    <ClInclude Include="src\exampleapp\WordCounterTask.h">
+      <Filter>src\exampleapp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -142,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="src\taskscheduler\TaskScheduler.cpp">
       <Filter>src\taskscheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exampleapp\WordCounterTask.cpp">
+      <Filter>src\exampleapp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 #include "utility/UpdateableContainer.h"
 #include "taskscheduler/TaskScheduler.h"
+#include "WordCounterTask.h"
 
 #include <chrono>
 #include <thread>
@@ -264,6 +265,13 @@ bool workerThread(std::vector<std::any> args, UpdateableContainer updateables)
 
 void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
 {
+  if( g_globalTaskManager.GetTaskStatus("worker") == ITask::TaskStatus::RUNNING )
+  {
+    g_globalTaskManager.StopTask("worker");
+    return;
+  }
+
+
   m_listLog.DeleteAllItems();
 
   UpdateableContainer updateables;
@@ -279,13 +287,10 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
   m_editWordToFind.GetWindowText(wordtofindbuf);
   std::string wordtofind = CT2A(wordtofindbuf);
 
-  std::vector<std::any> args;
-  args.push_back(filepath);
-  args.push_back(wordtofind);
-
-  g_globalTaskManager.AddTask("worker", workerThread, args, updateables );
+  auto taskptr = std::make_shared<WordCounterTask>(wordtofind, filepath, updateables);
+  g_globalTaskManager.AddTask("worker", taskptr);
   g_globalTaskManager.RunTask("worker");
-
+  
   std::string str = fmt::format("Started searching '{}' for the word '{}'.", filepath.string(), wordtofind);
   std::wstring wstr = ATL::CA2W(str.c_str());
   m_listLog.UpdateProgress(wstr);

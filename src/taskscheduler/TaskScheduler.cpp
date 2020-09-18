@@ -5,15 +5,34 @@
 #include "TaskScheduler.h"
 #include <thread>
 
-void TaskScheduler::AddTask(std::string id, std::function<bool(std::vector<std::any>, UpdateableContainer)> functor, std::vector<std::any> args, UpdateableContainer updateables)
+void TaskScheduler::AddTask(std::string id, std::shared_ptr<ITask> task)
 {
-  m_tasks.insert({id, {functor,args, updateables}});
+  m_tasks.insert({id, task});
 }
 
 void TaskScheduler::RunTask(std::string id)
 {
-  auto [functor, args, updateables] = m_tasks.at(id);
+  if( m_tasks.find(id) != m_tasks.end() )
+  {
+    auto task = m_tasks.at(id);
 
-  std::thread worker(functor, args, updateables);
-  worker.detach();
+    std::thread worker(&ITask::RunTask, task.get());
+    worker.detach();
+  }
+}
+
+void TaskScheduler::StopTask(std::string id)
+{  
+  if( m_tasks.find(id) != m_tasks.end() )
+  {
+    m_tasks.at(id)->StopTask();
+  }
+}
+
+ITask::TaskStatus TaskScheduler::GetTaskStatus(std::string id)
+{
+  if( m_tasks.find(id) != m_tasks.end() )
+    return m_tasks.at(id)->GetStatus();
+  else
+    return ITask::TaskStatus::NOT_RUN;
 }
