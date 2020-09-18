@@ -2,7 +2,7 @@
 
 #include <any>
 
-class XIAsyncProgressUpdateable
+class IAsyncProgressUpdateable
 {
 public:
   virtual void UpdateProgress(std::any in) = 0;

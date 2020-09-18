@@ -19,13 +19,13 @@ void CListCtrlUpdateAble::PreSubclassWindow()
 void CListCtrlUpdateAble::UpdateProgress(std::any in)
 {
   std::wstring wstr = std::any_cast<std::wstring>(in);
-  InsertItem(GetItemCount(), wstr.c_str());
+  EnsureVisible(InsertItem(GetItemCount(), wstr.c_str()),false);
   SetColumnWidth(0,LVSCW_AUTOSIZE);
 }
 
 void CListCtrlUpdateAble::UpdateResult(std::any in) 
 {
   std::wstring wstr = std::any_cast<std::wstring>(in);
-  InsertItem(GetItemCount(), wstr.c_str());
+  EnsureVisible(InsertItem(GetItemCount(), wstr.c_str()),false);
   SetColumnWidth(0,LVSCW_AUTOSIZE);
 }

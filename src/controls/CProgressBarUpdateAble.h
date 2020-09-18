@@ -1,8 +1,8 @@
 #pragma once
 
-#include "interface/XIAsyncProgressUpdateable.h"
+#include "interface/IAsyncProgressUpdateable.h"
 
-class CProgressBarUpdateAble : public CProgressCtrl, XIAsyncProgressUpdateable
+class CProgressBarUpdateAble : public CProgressCtrl, IAsyncProgressUpdateable
 {
  public:
 

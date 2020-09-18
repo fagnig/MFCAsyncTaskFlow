@@ -34,6 +34,9 @@
     <Filter Include="src\utility">
       <UniqueIdentifier>{284fa840-dee9-436b-baca-e702f8c0c37d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\taskscheduler">
+      <UniqueIdentifier>{0677de5e-e807-47e4-9850-b73bac4e6cf0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -59,9 +62,6 @@
     </ClInclude>
     <ClInclude Include="src\controls\CProgressBarUpdateAble.h">
       <Filter>src\controls</Filter>
-    </ClInclude>
-    <ClInclude Include="src\interface\XIAsyncProgressUpdateable.h">
-      <Filter>src\interface</Filter>
     </ClInclude>
     <ClInclude Include="lib\fmt\chrono.h">
       <Filter>lib\fmt</Filter>
@@ -105,6 +105,15 @@
     <ClInclude Include="src\utility\UpdateableContainer.h">
       <Filter>src\utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\taskscheduler\TaskScheduler.h">
+      <Filter>src\taskscheduler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\interface\IAsyncProgressUpdateable.h">
+      <Filter>src\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="src\interface\ITask.h">
+      <Filter>src\interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -131,8 +140,8 @@
     <ClCompile Include="src\controls\CListCtrlUpdateAble.cpp">
       <Filter>src\controls</Filter>
     </ClCompile>
-    <ClCompile Include="src\utility\UpdateableContainer.cpp">
-      <Filter>src\utility</Filter>
+    <ClCompile Include="src\taskscheduler\TaskScheduler.cpp">
+      <Filter>src\taskscheduler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

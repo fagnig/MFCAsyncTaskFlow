@@ -206,7 +206,9 @@
     <ClInclude Include="src\controls\CProgressBarUpdateAble.h" />
     <ClInclude Include="src\exampleapp\MFCAsyncTaskFlow.h" />
     <ClInclude Include="src\exampleapp\MFCAsyncTaskFlowDlg.h" />
-    <ClInclude Include="src\interface\XIAsyncProgressUpdateable.h" />
+    <ClInclude Include="src\interface\IAsyncProgressUpdateable.h" />
+    <ClInclude Include="src\interface\ITask.h" />
+    <ClInclude Include="src\taskscheduler\TaskScheduler.h" />
     <ClInclude Include="src\utility\UpdateableContainer.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -224,7 +226,7 @@
     <ClCompile Include="src\controls\CProgressBarUpdateAble.cpp" />
     <ClCompile Include="src\exampleapp\MFCAsyncTaskFlow.cpp" />
     <ClCompile Include="src\exampleapp\MFCAsyncTaskFlowDlg.cpp" />
-    <ClCompile Include="src\utility\UpdateableContainer.cpp" />
+    <ClCompile Include="src\taskscheduler\TaskScheduler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MFCAsyncTaskFlow.rc" />

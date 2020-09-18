@@ -1,8 +1,8 @@
 #pragma once
 
-#include "interface/XIAsyncProgressUpdateable.h"
+#include "interface/IAsyncProgressUpdateable.h"
 
-class CButtonUpdateAble : public CButton, XIAsyncProgressUpdateable
+class CButtonUpdateAble : public CButton, IAsyncProgressUpdateable
 {
 public:
   void UpdateProgress(std::any in) override;

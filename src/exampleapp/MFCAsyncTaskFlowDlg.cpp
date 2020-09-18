@@ -8,6 +8,7 @@
 #include "MFCAsyncTaskFlowDlg.h"
 #include "afxdialogex.h"
 #include "utility/UpdateableContainer.h"
+#include "taskscheduler/TaskScheduler.h"
 
 #include <chrono>
 #include <thread>
@@ -182,8 +183,11 @@ HCURSOR CMFCAsyncTaskFlowDlg::OnQueryDragIcon()
   return static_cast<HCURSOR>(m_hIcon);
 }
 
-void workerThread(const std::filesystem::path& file, const std::string& wordtofind, UpdateableContainer updateables)
+bool workerThread(std::vector<std::any> args, UpdateableContainer updateables)
 {
+  const std::filesystem::path file = std::any_cast<std::filesystem::path>(args[0]);
+  const std::string wordtofind = std::any_cast<std::string>(args[1]);
+
   int wordsfound = 0;
   int curline = 0;
   int linecount = 0;
@@ -207,13 +211,13 @@ void workerThread(const std::filesystem::path& file, const std::string& wordtofi
       std::getline(s, dummy);
       ++linecount;
       if( linecount % 5000 == 0 ){
-        for( const auto [id, ctrl] : updateables ){
+        for( const auto [id, pack] : updateables ){
           if( id!="listlog" )
-            ctrl->UpdateProgress((int)((linecount/(double)approxlines)*30));
+            pack.ctrl->UpdateProgress((int)((linecount/(double)approxlines)*30));
         }
       }
     }
-  
+
     std::string str = fmt::format("Found {} lines in '{}'.", linecount, file.string());
     std::wstring wstr = ATL::CA2W(str.c_str());
     updateables.GetProgressTarget("listlog")->UpdateResult(wstr);
@@ -228,11 +232,11 @@ void workerThread(const std::filesystem::path& file, const std::string& wordtofi
       {
         wordsfound++;
       }
-      
+
       if( curline % 200 == 0 ){
-        for( const auto [id, ctrl] : updateables ){
+        for( const auto [id, pack] : updateables ){
           if( id!="listlog" )
-            ctrl->UpdateProgress(30 + (int)((curline/(double)linecount)*70));
+            pack.ctrl->UpdateProgress(30 + (int)((curline/(double)linecount)*70));
           else if( curline % 3000 == 0 )
           {
             std::string str = fmt::format("Searched {} out of {} lines in '{}'.", curline, linecount, file.string());
@@ -246,25 +250,26 @@ void workerThread(const std::filesystem::path& file, const std::string& wordtofi
 
   s.close();
 
-  for( const auto [id, ctrl] : updateables ){
-    if( id!="listlog" ) {
-      ctrl->UpdateResult(wordsfound);
-    } else {
-      std::string str = fmt::format("Found {} instances of the word '{}' in '{}', searched {} lines.", wordsfound, wordtofind, file.string(), linecount);
-      std::wstring wstr = ATL::CA2W(str.c_str());
-      ctrl->UpdateResult(wstr);
-    }
+  for( const auto ctrl : updateables.GetProgressTargetByType("textual")){
+    std::string str = fmt::format("Found {} instances of the word '{}' in '{}', searched {} lines.", wordsfound, wordtofind, file.string(), linecount);
+    std::wstring wstr = ATL::CA2W(str.c_str());
+    ctrl->UpdateResult(wstr);
   }
+  for( const auto ctrl : updateables.GetProgressTargetByType("numeric")){
+    ctrl->UpdateResult(wordsfound);
+  }
+  return true;
 }
+
 
 void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
 {
   m_listLog.DeleteAllItems();
 
   UpdateableContainer updateables;
-  updateables.AddProgressUpdateTarget("progbar",(XIAsyncProgressUpdateable *)&m_ctrlProgressBar);
-  updateables.AddProgressUpdateTarget("strtbtn",(XIAsyncProgressUpdateable *)&m_buttonStartWork);
-  updateables.AddProgressUpdateTarget("listlog",(XIAsyncProgressUpdateable *)&m_listLog);
+  updateables.AddProgressUpdateTarget("progbar", "numeric", (IAsyncProgressUpdateable *)&m_ctrlProgressBar);
+  updateables.AddProgressUpdateTarget("strtbtn", "numeric", (IAsyncProgressUpdateable *)&m_buttonStartWork);
+  updateables.AddProgressUpdateTarget("listlog", "textual", (IAsyncProgressUpdateable *)&m_listLog);
 
   CString filepathbuf;
   m_ctrlFileBrowse.GetWindowText(filepathbuf);
@@ -274,8 +279,12 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
   m_editWordToFind.GetWindowText(wordtofindbuf);
   std::string wordtofind = CT2A(wordtofindbuf);
 
-  std::thread worker(workerThread, filepath, wordtofind, updateables);
-  worker.detach();
+  std::vector<std::any> args;
+  args.push_back(filepath);
+  args.push_back(wordtofind);
+
+  g_globalTaskManager.AddTask("worker", workerThread, args, updateables );
+  g_globalTaskManager.RunTask("worker");
 
   std::string str = fmt::format("Started searching '{}' for the word '{}'.", filepath.string(), wordtofind);
   std::wstring wstr = ATL::CA2W(str.c_str());

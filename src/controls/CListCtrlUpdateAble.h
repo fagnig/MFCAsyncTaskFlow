@@ -1,8 +1,8 @@
 #pragma once
 
-#include "interface/XIAsyncProgressUpdateable.h"
+#include "interface/IAsyncProgressUpdateable.h"
 
-class CListCtrlUpdateAble : public CListCtrl, XIAsyncProgressUpdateable
+class CListCtrlUpdateAble : public CListCtrl, IAsyncProgressUpdateable
 {
  public:
   void PreSubclassWindow();
