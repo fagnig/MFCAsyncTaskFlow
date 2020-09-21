@@ -11,6 +11,16 @@ class UpdateableContainer
 
   struct StorageType
   {
+    void UpdateProgress(std::any in)
+    {
+      if( ctrl )
+        ctrl->UpdateProgress(in);
+    }
+    void UpdateResult(std::any in)
+    {
+      if( ctrl )
+        ctrl->UpdateResult(in);
+    }
     std::string type;
     PrUpPtr     ctrl;
   };
@@ -24,15 +34,22 @@ class UpdateableContainer
   // Functions for interacting with the contents of the container
   void    AddProgressUpdateTarget(std::string id, std::string type, PrUpPtr ptr)  { m_internalMap.insert({id,{type, ptr}}); }
   void    RemoveProgressUpdateTarget(std::string id)                              { m_internalMap.erase(id); }
-  PrUpPtr GetProgressTarget(std::string id)                                       { try { return m_internalMap.at(id).ctrl; } catch(...) { return nullptr; } } 
+  StorageType GetProgressTarget(std::string id) 
+  { 
+    if(m_internalMap.find(id) != m_internalMap.end()){
+      return m_internalMap.at(id); 
+    }
 
-  std::vector<PrUpPtr> GetProgressTargetByType(std::string typeToFind)
+    return {"nulltype", nullptr};
+  } 
+
+  std::vector<StorageType> GetProgressTargetByType(std::string typeToFind)
   {
-    std::vector<PrUpPtr> ret;
+    std::vector<StorageType> ret;
     
     for( const auto [id, pack] : m_internalMap )
-      if( pack.type == typeToFind )
-        ret.push_back(pack.ctrl);
+      if( pack.type == typeToFind && pack.ctrl != nullptr )
+        ret.push_back(pack);
 
     return ret;
   }

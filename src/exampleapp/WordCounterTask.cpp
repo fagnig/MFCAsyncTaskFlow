@@ -51,9 +51,9 @@ void WordCounterTask::RunTask()
       std::getline(s, dummy);
       ++linecount;
       if( linecount % 5000 == 0 ){
-        for( const auto [id, pack] : m_updateables ){
+        for( auto [id, pack] : m_updateables ){
           if( id!="listlog" )
-            pack.ctrl->UpdateProgress((int)((linecount/(double)approxlines)*30));
+            pack.UpdateProgress((int)((linecount/(double)approxlines)*30));
         }
 
         if( m_stoptoken )
@@ -67,7 +67,7 @@ void WordCounterTask::RunTask()
 
     std::string str = fmt::format("Found {} lines in '{}'.", linecount, m_filepath.string());
     std::wstring wstr = ATL::CA2W(str.c_str());
-    m_updateables.GetProgressTarget("listlog")->UpdateResult(wstr);
+    m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
 
     if( m_stoptoken )
     {
@@ -102,7 +102,7 @@ void WordCounterTask::RunTask()
           {
             std::string str = fmt::format("Searched {} out of {} lines in '{}'.", curline, linecount, m_filepath.string());
             std::wstring wstr = ATL::CA2W(str.c_str());
-            m_updateables.GetProgressTarget("listlog")->UpdateResult(wstr);
+            m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
           }
         }
       }
@@ -111,14 +111,16 @@ void WordCounterTask::RunTask()
 
   s.close();
 
-  for( const auto ctrl : m_updateables.GetProgressTargetByType("textual")){
+  for( auto ctrl : m_updateables.GetProgressTargetByType("textual")){
     std::string str = fmt::format("Found {} instances of the word '{}' in '{}', searched {} lines.", wordsfound, m_wordtofind, m_filepath.string(), linecount);
     std::wstring wstr = ATL::CA2W(str.c_str());
-    ctrl->UpdateResult(wstr);
+    ctrl.UpdateResult(wstr);
   }
-  for( const auto ctrl : m_updateables.GetProgressTargetByType("numeric")){
-    ctrl->UpdateResult(wordsfound);
+  for( auto ctrl : m_updateables.GetProgressTargetByType("numeric")){
+    ctrl.UpdateResult(wordsfound);
   }
+
+  m_status = TaskStatus::FINISHED;
 }
 
 void WordCounterTask::StopTask()
@@ -127,7 +129,7 @@ void WordCounterTask::StopTask()
   m_status = TaskStatus::STOPPING;
   std::string str = "Stopping search...";
   std::wstring wstr = ATL::CA2W(str.c_str());
-  m_updateables.GetProgressTarget("listlog")->UpdateResult(wstr);
+  m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
 }
 
 void WordCounterTask::HaltTask()
@@ -141,10 +143,10 @@ void WordCounterTask::StopAndCleanup()
   m_status = TaskStatus::STOPPED;
   std::string str = fmt::format("Stopped searching for the word '{}'.", m_wordtofind);
   std::wstring wstr = ATL::CA2W(str.c_str());
-  m_updateables.GetProgressTarget("listlog")->UpdateResult(wstr);
+  m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
 
-  for( const auto ctrl : m_updateables.GetProgressTargetByType("numeric")){
-    ctrl->UpdateResult(0);
+  for( auto ctrl : m_updateables.GetProgressTargetByType("numeric")){
+    ctrl.UpdateResult(0);
   }
   
   m_stoptoken = false;

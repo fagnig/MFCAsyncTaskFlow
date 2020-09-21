@@ -142,6 +142,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\src;$(MSBuildProjectDirectory)\lib;$(MSBuildProjectDirectory)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -206,6 +207,7 @@
     <ClInclude Include="src\controls\CProgressBarUpdateAble.h" />
     <ClInclude Include="src\exampleapp\MFCAsyncTaskFlow.h" />
     <ClInclude Include="src\exampleapp\MFCAsyncTaskFlowDlg.h" />
+    <ClInclude Include="src\exampleapp\SubDlgTest.h" />
     <ClInclude Include="src\exampleapp\WordCounterTask.h" />
     <ClInclude Include="src\interface\IAsyncProgressUpdateable.h" />
     <ClInclude Include="src\interface\ITask.h" />
@@ -227,6 +229,7 @@
     <ClCompile Include="src\controls\CProgressBarUpdateAble.cpp" />
     <ClCompile Include="src\exampleapp\MFCAsyncTaskFlow.cpp" />
     <ClCompile Include="src\exampleapp\MFCAsyncTaskFlowDlg.cpp" />
+    <ClCompile Include="src\exampleapp\SubDlgTest.cpp" />
     <ClCompile Include="src\exampleapp\WordCounterTask.cpp" />
     <ClCompile Include="src\taskscheduler\TaskScheduler.cpp" />
   </ItemGroup>

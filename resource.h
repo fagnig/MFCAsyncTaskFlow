@@ -8,6 +8,7 @@
 #define IDS_ABOUTBOX                    101
 #define IDD_MFCASYNCTASKFLOW_DIALOG     102
 #define IDR_MAINFRAME                   128
+#define IDD_SUBDLGTEST_DIALOG           131
 #define IDC_PROGRESS                    1002
 #define IDC_FILEBROWSE                  1004
 #define IDC_EDIT3                       1005
@@ -20,7 +21,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        131
+#define _APS_NEXT_RESOURCE_VALUE        133
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1008
 #define _APS_NEXT_SYMED_VALUE           101

@@ -10,6 +10,7 @@
 #include "utility/UpdateableContainer.h"
 #include "taskscheduler/TaskScheduler.h"
 #include "WordCounterTask.h"
+#include "SubDlgTest.h"
 
 #include <chrono>
 #include <thread>
@@ -184,85 +185,6 @@ HCURSOR CMFCAsyncTaskFlowDlg::OnQueryDragIcon()
   return static_cast<HCURSOR>(m_hIcon);
 }
 
-bool workerThread(std::vector<std::any> args, UpdateableContainer updateables)
-{
-  const std::filesystem::path file = std::any_cast<std::filesystem::path>(args[0]);
-  const std::string wordtofind = std::any_cast<std::string>(args[1]);
-
-  int wordsfound = 0;
-  int curline = 0;
-  int linecount = 0;
-
-  std::ifstream s;
-  s.open(file, std::ifstream::in);
-
-  if( s.is_open() )
-  {
-    std::string line;
-    std::getline(s, line);
-    const auto firstlinelen = line.length();
-    s.seekg(0);
-
-    const auto fsize = std::filesystem::file_size(file);
-    const auto approxlines = fsize/firstlinelen;
-
-
-    while(!s.eof()) {
-      std::string dummy;
-      std::getline(s, dummy);
-      ++linecount;
-      if( linecount % 5000 == 0 ){
-        for( const auto [id, pack] : updateables ){
-          if( id!="listlog" )
-            pack.ctrl->UpdateProgress((int)((linecount/(double)approxlines)*30));
-        }
-      }
-    }
-
-    std::string str = fmt::format("Found {} lines in '{}'.", linecount, file.string());
-    std::wstring wstr = ATL::CA2W(str.c_str());
-    updateables.GetProgressTarget("listlog")->UpdateResult(wstr);
-
-    s.clear();
-    s.seekg(0);
-
-    while( std::getline(s, line) ){
-      ++curline;
-      size_t pos = 0;
-      while( (pos = line.find(wordtofind, pos+1)) != std::string::npos )
-      {
-        wordsfound++;
-      }
-
-      if( curline % 200 == 0 ){
-        for( const auto [id, pack] : updateables ){
-          if( id!="listlog" )
-            pack.ctrl->UpdateProgress(30 + (int)((curline/(double)linecount)*70));
-          else if( curline % 3000 == 0 )
-          {
-            std::string str = fmt::format("Searched {} out of {} lines in '{}'.", curline, linecount, file.string());
-            std::wstring wstr = ATL::CA2W(str.c_str());
-            updateables.GetProgressTarget("listlog")->UpdateResult(wstr);
-          }
-        }
-      }
-    }
-  }
-
-  s.close();
-
-  for( const auto ctrl : updateables.GetProgressTargetByType("textual")){
-    std::string str = fmt::format("Found {} instances of the word '{}' in '{}', searched {} lines.", wordsfound, wordtofind, file.string(), linecount);
-    std::wstring wstr = ATL::CA2W(str.c_str());
-    ctrl->UpdateResult(wstr);
-  }
-  for( const auto ctrl : updateables.GetProgressTargetByType("numeric")){
-    ctrl->UpdateResult(wordsfound);
-  }
-  return true;
-}
-
-
 void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
 {
   if( g_globalTaskManager.GetTaskStatus("worker") == ITask::TaskStatus::RUNNING )
@@ -271,13 +193,19 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
     return;
   }
 
-
   m_listLog.DeleteAllItems();
 
   UpdateableContainer updateables;
-  updateables.AddProgressUpdateTarget("progbar", "numeric", (IAsyncProgressUpdateable *)&m_ctrlProgressBar);
-  updateables.AddProgressUpdateTarget("strtbtn", "numeric", (IAsyncProgressUpdateable *)&m_buttonStartWork);
-  updateables.AddProgressUpdateTarget("listlog", "textual", (IAsyncProgressUpdateable *)&m_listLog);
+  updateables.AddProgressUpdateTarget("progbar", "numeric", (IAsyncProgressUpdateable *)&m_ctrlProgressBar );
+  updateables.AddProgressUpdateTarget("strtbtn", "numeric", (IAsyncProgressUpdateable *)&m_buttonStartWork );
+  updateables.AddProgressUpdateTarget("listlog", "textual", (IAsyncProgressUpdateable *)&m_listLog );
+
+  if( !m_subdlg )
+    m_subdlg = std::make_unique<SubDlgTest>(this);
+
+  updateables.AddProgressUpdateTarget("progbarext", "numeric", (IAsyncProgressUpdateable *)m_subdlg->GetProgressControlPtr() );
+
+  m_subdlg->ShowWindow(SW_SHOW);
 
   CString filepathbuf;
   m_ctrlFileBrowse.GetWindowText(filepathbuf);

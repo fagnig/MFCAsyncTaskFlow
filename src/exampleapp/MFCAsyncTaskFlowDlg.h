@@ -7,7 +7,9 @@
 #include "controls/CProgressBarUpdateAble.h"
 #include "controls/CButtonUpdateable.h"
 #include "controls/CListCtrlUpdateAble.h"
+#include "SubDlgTest.h"
 
+#include <memory>
 
 // CMFCAsyncTaskFlowDlg dialog
 class CMFCAsyncTaskFlowDlg : public CDialogEx
@@ -32,6 +34,8 @@ protected:
   CMFCEditBrowseCtrl      m_ctrlFileBrowse;
   CEdit                   m_editWordToFind;
   CListCtrlUpdateAble     m_listLog;
+
+  std::unique_ptr<SubDlgTest> m_subdlg;
 
   virtual BOOL            OnInitDialog() override;
 
