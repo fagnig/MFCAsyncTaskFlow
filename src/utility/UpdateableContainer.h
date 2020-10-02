@@ -9,6 +9,7 @@ class UpdateableContainer
  public:
   using PrUpPtr = IAsyncProgressUpdateable *;
 
+  // Internal 
   struct StorageType
   {
     void UpdateProgress(std::any in)
@@ -34,6 +35,8 @@ class UpdateableContainer
   // Functions for interacting with the contents of the container
   void    AddProgressUpdateTarget(std::string id, std::string type, PrUpPtr ptr)  { m_internalMap.insert({id,{type, ptr}}); }
   void    RemoveProgressUpdateTarget(std::string id)                              { m_internalMap.erase(id); }
+
+  [[ nodiscard ]] 
   StorageType GetProgressTarget(std::string id) 
   { 
     if(m_internalMap.find(id) != m_internalMap.end()){
@@ -43,6 +46,7 @@ class UpdateableContainer
     return {"nulltype", nullptr};
   } 
 
+  [[ nodiscard ]] 
   std::vector<StorageType> GetProgressTargetByType(std::string typeToFind)
   {
     std::vector<StorageType> ret;

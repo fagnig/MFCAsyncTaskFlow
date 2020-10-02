@@ -7,6 +7,8 @@
 #include "MFCAsyncTaskFlow.h"
 #include "MFCAsyncTaskFlowDlg.h"
 
+#include "taskscheduler/TaskScheduler.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -51,7 +53,6 @@ BOOL CMFCAsyncTaskFlowApp::InitInstance()
   InitCommonControlsEx(&InitCtrls);
 
   CWinApp::InitInstance();
-
 
   AfxEnableControlContainer();
 

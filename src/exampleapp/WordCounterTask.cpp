@@ -23,6 +23,8 @@
 
 using namespace std::chrono_literals;
 
+// Set to true to have the thread hang forever to test task cancellation
+constexpr bool SHOULDTHREADHANG = false;
 
 void WordCounterTask::RunTask()
 {
@@ -51,10 +53,9 @@ void WordCounterTask::RunTask()
       std::getline(s, dummy);
       ++linecount;
       if( linecount % 5000 == 0 ){
-        for( auto [id, pack] : m_updateables ){
+        for( auto [id, pack] : m_updateables )
           if( id!="listlog" )
             pack.UpdateProgress((int)((linecount/(double)approxlines)*30));
-        }
 
         if( m_stoptoken )
         {
@@ -83,9 +84,7 @@ void WordCounterTask::RunTask()
       ++curline;
       size_t pos = 0;
       while( (pos = line.find(m_wordtofind, pos+1)) != std::string::npos )
-      {
         wordsfound++;
-      }
 
       if( curline % 200 == 0 ){
         if( m_stoptoken )
@@ -97,7 +96,9 @@ void WordCounterTask::RunTask()
 
         for( const auto [id, pack] : m_updateables ){
           if( id!="listlog" )
+          {
             pack.ctrl->UpdateProgress(30 + (int)((curline/(double)linecount)*70));
+          }
           else if( curline % 3000 == 0 )
           {
             std::string str = fmt::format("Searched {} out of {} lines in '{}'.", curline, linecount, m_filepath.string());
@@ -111,12 +112,25 @@ void WordCounterTask::RunTask()
 
   s.close();
 
-  for( auto ctrl : m_updateables.GetProgressTargetByType("textual")){
+  while( SHOULDTHREADHANG )
+  {
+    if( m_stoptoken )
+    {
+      StopAndCleanup();
+      return;
+    }
+    std::this_thread::sleep_for(1s);
+  }
+
+
+  for( auto ctrl : m_updateables.GetProgressTargetByType("textual"))
+  {
     std::string str = fmt::format("Found {} instances of the word '{}' in '{}', searched {} lines.", wordsfound, m_wordtofind, m_filepath.string(), linecount);
     std::wstring wstr = ATL::CA2W(str.c_str());
     ctrl.UpdateResult(wstr);
   }
-  for( auto ctrl : m_updateables.GetProgressTargetByType("numeric")){
+  for( auto ctrl : m_updateables.GetProgressTargetByType("numeric"))
+  {
     ctrl.UpdateResult(wordsfound);
   }
 

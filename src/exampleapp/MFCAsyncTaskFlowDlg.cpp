@@ -217,7 +217,6 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
 
   auto taskptr = std::make_shared<WordCounterTask>(wordtofind, filepath, updateables);
   g_globalTaskManager.AddTask("worker", taskptr);
-  g_globalTaskManager.RunTask("worker");
   
   std::string str = fmt::format("Started searching '{}' for the word '{}'.", filepath.string(), wordtofind);
   std::wstring wstr = ATL::CA2W(str.c_str());
