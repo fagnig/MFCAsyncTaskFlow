@@ -207,6 +207,10 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
 
   m_subdlg->ShowWindow(SW_SHOW);
 
+  CRect rc;
+  GetWindowRect(&rc);
+  m_subdlg->SetWindowPos(&wndTop, rc.right, rc.top, 0, 0, SWP_NOSIZE);
+
   CString filepathbuf;
   m_ctrlFileBrowse.GetWindowText(filepathbuf);
   std::filesystem::path filepath(filepathbuf.GetBuffer());
