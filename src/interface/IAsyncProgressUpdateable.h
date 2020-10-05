@@ -22,15 +22,24 @@ public:
 
 };
 
+/// Below are macros defined for implementation of the message passing style of asynchronous updating for MFC controls
+/// MAKE_ASYNCUPDATEABLE(t, base_t) is the implementation macro - With more complex classes (that already have a message map),
+/// these should be implemented using MAKE_ASYNCUPDATEABLE_MSGMAP and MAKE_ASYNCUPDATEABLE_FUNCS macros like so:
+///                           BEGIN_MESSAGE_MAP(TestClass, BaseClass)
+///                             -- Other messagemap functions --
+///                             MAKE_ASYNCUPDATEABLE_MSGMAP(TestClass)
+///                           END_MESSAGE_MAP()
+/// 
+///                           MAKE_ASYNCUPDATEABLE_FUNCS(TestClass)
+/// 
+/// Same idea with the header definitions, MAKE_ASYNCUPDATEABLE_HEADER() if no messagemap, 
+/// MAKE_ASYNCUPDATEABLE_HEADER_NOMSGMAP() if messagemap is already present
 
-// Below are macros defined for implementation of the message passing style of asynchronous updating
-
-#define MAKE_ASYNCUPDATEABLE(t, base_t)                                         \
-  BEGIN_MESSAGE_MAP( t, base_t )                                                \
+#define MAKE_ASYNCUPDATEABLE_MSGMAP(t)                                          \
     ON_MESSAGE( ASYNCUPDATEPROGRESS_MESSAGE, &t::UpdateProgressMessage )        \
     ON_MESSAGE( ASYNCUPDATERESULT_MESSAGE, &t::UpdateResultMessage )            \
-  END_MESSAGE_MAP()                                                             \
-                                                                                \
+
+#define MAKE_ASYNCUPDATEABLE_FUNCS(t)                                           \
   LRESULT t::UpdateProgressMessage(WPARAM w, LPARAM l)                          \
   {                                                                             \
     std::any * in = (std::any *)(l);                                            \
@@ -49,7 +58,17 @@ public:
     return 0;                                                                   \
   }                                                                             \
 
-#define MAKE_ASYNCUPDATEABLE_HEADER()                                           \
-  DECLARE_MESSAGE_MAP();                                                        \
+#define MAKE_ASYNCUPDATEABLE(t, base_t)                                         \
+  BEGIN_MESSAGE_MAP( t, base_t )                                                \
+    MAKE_ASYNCUPDATEABLE_MSGMAP(t)                                              \
+  END_MESSAGE_MAP()                                                             \
+                                                                                \
+  MAKE_ASYNCUPDATEABLE_FUNCS(t)                                                 \
+
+#define MAKE_ASYNCUPDATEABLE_HEADER_NOMSGMAP()                                  \
   afx_msg LRESULT UpdateProgressMessage(WPARAM, LPARAM);                        \
   afx_msg LRESULT UpdateResultMessage(WPARAM, LPARAM);                          \
+
+#define MAKE_ASYNCUPDATEABLE_HEADER()                                           \
+  DECLARE_MESSAGE_MAP();                                                        \
+  MAKE_ASYNCUPDATEABLE_HEADER_NOMSGMAP()                                        \
