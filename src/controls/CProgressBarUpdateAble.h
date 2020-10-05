@@ -10,9 +10,8 @@ class CProgressBarUpdateAble : public CProgressCtrl, IAsyncProgressUpdateable
 
   void UpdateResult(std::any in) override;
 
-  MAKE_ASYNCUPDATEABLE_HEADER();
+  MAKE_ASYNCUPDATEABLE_HEADER()
 
 private:
   
 };
-

@@ -11,14 +11,14 @@
 /// </summary>
 
 constexpr int ASYNCUPDATEPROGRESS_MESSAGE = WM_USER + 500;
-constexpr int ASYNCUPDATERESULT_MESSAGE = WM_USER + 501;
+constexpr int ASYNCUPDATERESULT_MESSAGE   = WM_USER + 501;
 
 class IAsyncProgressUpdateable
 {
 public:
   virtual void UpdateProgress(std::any in) = 0;
 
-  virtual void UpdateResult(std::any in) = 0;
+  virtual void UpdateResult  (std::any in) = 0;
 
 };
 
@@ -70,5 +70,5 @@ public:
   afx_msg LRESULT UpdateResultMessage(WPARAM, LPARAM);                          \
 
 #define MAKE_ASYNCUPDATEABLE_HEADER()                                           \
-  DECLARE_MESSAGE_MAP();                                                        \
+  DECLARE_MESSAGE_MAP()                                                         \
   MAKE_ASYNCUPDATEABLE_HEADER_NOMSGMAP()                                        \
