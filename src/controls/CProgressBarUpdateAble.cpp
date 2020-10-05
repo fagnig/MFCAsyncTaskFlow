@@ -14,3 +14,5 @@ void CProgressBarUpdateAble::UpdateResult(std::any in)
 
   SetBarColor(RGB(255,255,0));
 }
+
+MAKE_ASYNCUPDATEABLE(CProgressBarUpdateAble, CProgressCtrl)

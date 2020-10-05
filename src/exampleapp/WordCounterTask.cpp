@@ -94,10 +94,10 @@ void WordCounterTask::RunTask()
           return;
         }
 
-        for( const auto [id, pack] : m_updateables ){
+        for( auto [id, pack] : m_updateables ){
           if( id!="listlog" )
           {
-            pack.ctrl->UpdateProgress(30 + (int)((curline/(double)linecount)*70));
+            pack.UpdateProgress(30 + (int)((curline/(double)linecount)*70));
           }
           else if( curline % 3000 == 0 )
           {

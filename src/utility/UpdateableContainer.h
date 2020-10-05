@@ -14,16 +14,20 @@ class UpdateableContainer
   {
     void UpdateProgress(std::any in)
     {
-      if( ctrl )
-        ctrl->UpdateProgress(in);
+      auto tmp = new std::any;
+      *tmp = in;
+
+      PostMessage(ctrlhwnd, ASYNCUPDATEPROGRESS_MESSAGE, 0, (LPARAM)tmp);
     }
     void UpdateResult(std::any in)
     {
-      if( ctrl )
-        ctrl->UpdateResult(in);
+      auto tmp = new std::any;
+      *tmp = in;
+
+      PostMessage(ctrlhwnd, ASYNCUPDATERESULT_MESSAGE, 0, (LPARAM)tmp);
     }
     std::string type;
-    PrUpPtr     ctrl;
+    HWND        ctrlhwnd;
   };
 
   // Iterators for algorithms
@@ -33,7 +37,7 @@ class UpdateableContainer
   const auto end() const    { return m_internalMap.end();   }
 
   // Functions for interacting with the contents of the container
-  void    AddProgressUpdateTarget(std::string id, std::string type, PrUpPtr ptr)  { m_internalMap.insert({id,{type, ptr}}); }
+  void    AddProgressUpdateTarget(std::string id, std::string type, HWND hwnd)     { m_internalMap.insert({id,{type ,hwnd}}); }
   void    RemoveProgressUpdateTarget(std::string id)                              { m_internalMap.erase(id); }
 
   [[ nodiscard ]] 
@@ -52,7 +56,7 @@ class UpdateableContainer
     std::vector<StorageType> ret;
     
     for( const auto [id, pack] : m_internalMap )
-      if( pack.type == typeToFind && pack.ctrl != nullptr )
+      if( pack.type == typeToFind )
         ret.push_back(pack);
 
     return ret;

@@ -22,3 +22,5 @@ void CButtonUpdateAble::UpdateResult(std::any in)
 
   SetWindowText(L"Start");
 }
+
+MAKE_ASYNCUPDATEABLE(CButtonUpdateAble, CButton)

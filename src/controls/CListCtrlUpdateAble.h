@@ -11,6 +11,7 @@ class CListCtrlUpdateAble : public CListCtrl, IAsyncProgressUpdateable
 
   void UpdateResult(std::any in) override;
 
+  MAKE_ASYNCUPDATEABLE_HEADER();
 private:
   
 };

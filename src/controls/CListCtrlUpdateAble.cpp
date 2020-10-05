@@ -29,3 +29,5 @@ void CListCtrlUpdateAble::UpdateResult(std::any in)
   EnsureVisible(InsertItem(GetItemCount(), wstr.c_str()),false);
   SetColumnWidth(0,LVSCW_AUTOSIZE);
 }
+
+MAKE_ASYNCUPDATEABLE(CListCtrlUpdateAble, CListCtrl)

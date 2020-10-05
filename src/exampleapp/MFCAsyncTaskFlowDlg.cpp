@@ -196,14 +196,14 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
   m_listLog.DeleteAllItems();
 
   UpdateableContainer updateables;
-  updateables.AddProgressUpdateTarget("progbar", "numeric", (IAsyncProgressUpdateable *)&m_ctrlProgressBar );
-  updateables.AddProgressUpdateTarget("strtbtn", "numeric", (IAsyncProgressUpdateable *)&m_buttonStartWork );
-  updateables.AddProgressUpdateTarget("listlog", "textual", (IAsyncProgressUpdateable *)&m_listLog );
+  updateables.AddProgressUpdateTarget("progbar", "numeric", m_ctrlProgressBar.GetSafeHwnd() );
+  updateables.AddProgressUpdateTarget("strtbtn", "numeric", m_buttonStartWork.GetSafeHwnd() );
+  updateables.AddProgressUpdateTarget("listlog", "textual", m_listLog.GetSafeHwnd() );
 
   if( !m_subdlg )
     m_subdlg = std::make_unique<SubDlgTest>(this);
 
-  updateables.AddProgressUpdateTarget("progbarext", "numeric", (IAsyncProgressUpdateable *)m_subdlg->GetProgressControlPtr() );
+  updateables.AddProgressUpdateTarget("progbarext", "numeric", m_subdlg->GetProgressControlPtr()->GetSafeHwnd() );
 
   m_subdlg->ShowWindow(SW_SHOW);
 
