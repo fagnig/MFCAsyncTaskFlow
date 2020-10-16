@@ -57,6 +57,8 @@ void WordCounterTask::RunTask()
           if( id!="listlog" )
             pack.UpdateProgress((int)((linecount/(double)approxlines)*30));
 
+        std::this_thread::sleep_for(50ms); // Intentional delay to emphasise the UI updates
+
         if( m_stoptoken )
         {
           s.close();
@@ -87,6 +89,8 @@ void WordCounterTask::RunTask()
         wordsfound++;
 
       if( curline % 200 == 0 ){
+        std::this_thread::sleep_for(50ms); // Intentional delay to emphasise the UI updates
+
         if( m_stoptoken )
         {
           s.close();

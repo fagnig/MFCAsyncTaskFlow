@@ -202,12 +202,14 @@
     <ClInclude Include="lib\fmt\ranges.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="src\controls\CButtonThrobberUpdateable.h" />
     <ClInclude Include="src\controls\CButtonUpdateable.h" />
     <ClInclude Include="src\controls\CListCtrlUpdateAble.h" />
     <ClInclude Include="src\controls\CProgressBarUpdateAble.h" />
     <ClInclude Include="src\exampleapp\MFCAsyncTaskFlow.h" />
     <ClInclude Include="src\exampleapp\MFCAsyncTaskFlowDlg.h" />
     <ClInclude Include="src\exampleapp\SubDlgTest.h" />
+    <ClInclude Include="src\exampleapp\WaiterTask.h" />
     <ClInclude Include="src\exampleapp\WordCounterTask.h" />
     <ClInclude Include="src\interface\IAsyncProgressUpdateable.h" />
     <ClInclude Include="src\interface\ITask.h" />
@@ -224,12 +226,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\controls\CButtonThrobberUpdateable.cpp" />
     <ClCompile Include="src\controls\CButtonUpdateAble.cpp" />
     <ClCompile Include="src\controls\CListCtrlUpdateAble.cpp" />
     <ClCompile Include="src\controls\CProgressBarUpdateAble.cpp" />
     <ClCompile Include="src\exampleapp\MFCAsyncTaskFlow.cpp" />
     <ClCompile Include="src\exampleapp\MFCAsyncTaskFlowDlg.cpp" />
     <ClCompile Include="src\exampleapp\SubDlgTest.cpp" />
+    <ClCompile Include="src\exampleapp\WaiterTask.cpp" />
     <ClCompile Include="src\exampleapp\WordCounterTask.cpp" />
     <ClCompile Include="src\taskscheduler\TaskScheduler.cpp" />
   </ItemGroup>

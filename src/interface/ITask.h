@@ -16,7 +16,7 @@ class ITask
 {
  public:
 
-  enum class TaskStatus   { NOT_RUN, RUNNING, HALTED, STOPPING, STOPPED, FINISHED };
+  enum class TaskStatus   { NO_SUCH_TASK, NOT_RUN, RUNNING, HALTED, STOPPING, STOPPED, FINISHED };
   TaskStatus GetStatus()  { return m_status; };
 
   // Interface part starts here

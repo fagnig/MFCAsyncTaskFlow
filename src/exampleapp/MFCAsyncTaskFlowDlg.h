@@ -6,6 +6,7 @@
 
 #include "controls/CProgressBarUpdateAble.h"
 #include "controls/CButtonUpdateable.h"
+#include "controls/CButtonThrobberUpdateable.h"
 #include "controls/CListCtrlUpdateAble.h"
 #include "SubDlgTest.h"
 
@@ -29,11 +30,14 @@ protected:
   // Member variables
   HICON m_hIcon;
 
-  CProgressBarUpdateAble  m_ctrlProgressBar;
-  CButtonUpdateAble       m_buttonStartWork;
-  CMFCEditBrowseCtrl      m_ctrlFileBrowse;
-  CEdit                   m_editWordToFind;
-  CListCtrlUpdateAble     m_listLog;
+  CProgressBarUpdateAble    m_ctrlProgressBar;
+  CButtonUpdateAble         m_buttonStartWork;
+  CMFCEditBrowseCtrl        m_ctrlFileBrowse;
+  CEdit                     m_editWordToFind;
+  CListCtrlUpdateAble       m_listLog;
+
+  CEdit                     m_editSecondsToThink;
+  CButtonThrobberUpdateable m_buttonStartWait;
 
   std::unique_ptr<SubDlgTest> m_subdlg;
 
@@ -47,10 +51,12 @@ protected:
   
   // Message map - Buttons
   afx_msg void            OnBnClickedStartWork();
+  afx_msg void            OnBnClickedStartWait();
 
   DECLARE_MESSAGE_MAP()
 
 private:
   int32_t m_iSizeMinX{300};
   int32_t m_iSizeMinY{300};
+
 };

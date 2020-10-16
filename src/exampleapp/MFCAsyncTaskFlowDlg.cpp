@@ -10,6 +10,7 @@
 #include "utility/UpdateableContainer.h"
 #include "taskscheduler/TaskScheduler.h"
 #include "WordCounterTask.h"
+#include "WaiterTask.h"
 #include "SubDlgTest.h"
 
 #include <chrono>
@@ -81,6 +82,9 @@ void CMFCAsyncTaskFlowDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_FILEBROWSE, m_ctrlFileBrowse);
   DDX_Control(pDX, IDC_WORDTOFIND, m_editWordToFind);
   DDX_Control(pDX, IDC_LOGLIST, m_listLog);
+
+  DDX_Control(pDX, IDC_SECONDSTOTHINK, m_editSecondsToThink);
+  DDX_Control(pDX, IDC_STARTWORK2, m_buttonStartWait);
 }
 
 BEGIN_MESSAGE_MAP(CMFCAsyncTaskFlowDlg, CDialogEx)
@@ -89,6 +93,7 @@ BEGIN_MESSAGE_MAP(CMFCAsyncTaskFlowDlg, CDialogEx)
   ON_WM_QUERYDRAGICON()
   ON_WM_GETMINMAXINFO()
   ON_BN_CLICKED(IDC_STARTWORK, &CMFCAsyncTaskFlowDlg::OnBnClickedStartWork)
+  ON_BN_CLICKED(IDC_STARTWORK2, &CMFCAsyncTaskFlowDlg::OnBnClickedStartWait)
 END_MESSAGE_MAP()
 
 
@@ -129,7 +134,7 @@ BOOL CMFCAsyncTaskFlowDlg::OnInitDialog()
   m_iSizeMinX = rect.Width();
   m_iSizeMinY = rect.Height();
 
-  SetWindowText(L"Async Taskflow Prototype");
+  SetWindowText(L"Async Task Prototype");
 
   m_ctrlFileBrowse.EnableFileBrowseButton();
 
@@ -231,4 +236,25 @@ void CMFCAsyncTaskFlowDlg::OnGetMinMaxInfo(MINMAXINFO * lpMMI)
 {
   lpMMI->ptMinTrackSize.x = m_iSizeMinX;
   lpMMI->ptMinTrackSize.y = m_iSizeMinY;
+}
+
+
+void CMFCAsyncTaskFlowDlg::OnBnClickedStartWait()
+{
+  UpdateableContainer updateables;
+  updateables.AddProgressUpdateTarget("throbberbutton", "throbber", m_buttonStartWait.GetSafeHwnd() );
+  updateables.AddProgressUpdateTarget("listlog", "textual", m_listLog.GetSafeHwnd() );
+
+  CString waittimebuf;
+  m_editSecondsToThink.GetWindowText(waittimebuf);
+  int waittime = _ttoi(waittimebuf);
+
+  auto taskptr = std::make_shared<WaiterTask>(waittime,updateables);
+  g_globalTaskManager.AddTask("waiter", taskptr);
+
+  m_buttonStartWait.UpdateProgress(1);
+
+  std::string str = fmt::format("Asynchronously waiting for {} seconds.", waittime);
+  std::wstring wstr = ATL::CA2W(str.c_str());
+  m_listLog.UpdateProgress(wstr);
 }

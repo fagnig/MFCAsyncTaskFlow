@@ -120,6 +120,12 @@
     <ClInclude Include="src\exampleapp\SubDlgTest.h">
       <Filter>src\exampleapp</Filter>
     </ClInclude>
+    <ClInclude Include="src\exampleapp\WaiterTask.h">
+      <Filter>src\exampleapp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\controls\CButtonThrobberUpdateable.h">
+      <Filter>src\controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -154,6 +160,12 @@
     </ClCompile>
     <ClCompile Include="src\exampleapp\SubDlgTest.cpp">
       <Filter>src\exampleapp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exampleapp\WaiterTask.cpp">
+      <Filter>src\exampleapp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controls\CButtonThrobberUpdateable.cpp">
+      <Filter>src\controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

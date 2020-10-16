@@ -28,7 +28,6 @@ class TaskScheduler
   ~TaskScheduler();
 
   void AddTask(std::string id, std::shared_ptr<ITask> task);
-  void RunTask(std::string id);
   void StopTask(std::string id);
   ITask::TaskStatus GetTaskStatus(std::string id);
 
@@ -36,6 +35,9 @@ class TaskScheduler
   void ShutdownScheduler();
 
  private:
+  void TaskSpinner();
+  bool m_stopped{false};
+
   std::unordered_map<std::string, std::shared_ptr<ITask>> m_runningTasks;
 
   std::vector<std::thread>            m_threadPool;
@@ -46,10 +48,6 @@ class TaskScheduler
   std::condition_variable             m_condition;
   std::atomic<bool>                   m_killworkers{false};
 
-  void TaskSpinner();
-
-
-  bool m_stopped{false};
 };
 
 static TaskScheduler g_globalTaskManager;

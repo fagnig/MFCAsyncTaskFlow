@@ -5,22 +5,16 @@
 #include "TaskScheduler.h"
 #include <thread>
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="id">String identifier</param>
+/// <param name="task">Shared ptr to an object implementing an ITask interface</param>
 void TaskScheduler::AddTask(std::string id, std::shared_ptr<ITask> task)
 {
   m_taskQueue.push({id, task});
 
   m_condition.notify_all();
-}
-
-void TaskScheduler::RunTask(std::string id)
-{
-  if( m_runningTasks.find(id) != m_runningTasks.end() )
-  {
-    auto task = m_runningTasks.at(id);
-
-    std::thread worker(&ITask::RunTask, task.get());
-    worker.detach();
-  }
 }
 
 void TaskScheduler::StopTask(std::string id)
@@ -36,7 +30,7 @@ ITask::TaskStatus TaskScheduler::GetTaskStatus(std::string id)
   if( m_runningTasks.find(id) != m_runningTasks.end() )
     return m_runningTasks.at(id)->GetStatus();
   else
-    return ITask::TaskStatus::NOT_RUN;
+    return ITask::TaskStatus::NO_SUCH_TASK;
 }
 
 
@@ -63,7 +57,7 @@ void TaskScheduler::TaskSpinner()
     {
       std::unique_lock<std::mutex> lock(m_queuelock);
 
-      // Waits until there's a job to do
+      // Waits until there's a job to do, mutex lock makes sure that only one thread grabs a task at a time
       m_condition.wait(lock, [this](){ return !m_taskQueue.empty() || m_killworkers; });
       if( m_killworkers ) return;
 
@@ -85,10 +79,11 @@ void TaskScheduler::TaskSpinner()
 
 void TaskScheduler::ShutdownScheduler()
 {
+  //Kill all idle spinners
   m_killworkers = true;
-
   m_condition.notify_all();
 
+  //Stop all running tasks, and join their threads
   for( auto & [id, task] : m_runningTasks )
     task->StopTask();
 
