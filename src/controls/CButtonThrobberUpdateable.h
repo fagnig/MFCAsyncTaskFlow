@@ -12,10 +12,13 @@ public:
   DECLARE_MESSAGE_MAP()
   MAKE_ASYNCUPDATEABLE_HEADER_NOMSGMAP()
 
+  void SetProgressDisable(bool disable) { m_bProgressDisable = disable; }
 
   afx_msg void OnTimer(UINT nIDEvent);
 private:
 
-  int dot;
+  int m_iDot;
+
+  bool m_bProgressDisable{true};
 };
 

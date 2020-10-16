@@ -14,7 +14,7 @@ void CButtonThrobberUpdateable::UpdateProgress(std::any in)
 {
   SetTimer(1, 500, nullptr);
 
-  EnableWindow( false );
+  EnableWindow( m_bProgressDisable ? false : true );
 
 }
 
@@ -22,7 +22,7 @@ void CButtonThrobberUpdateable::UpdateResult(std::any in)
 {
   EnableWindow( true );
 
-  dot = 0;
+  m_iDot = 0;
   
   KillTimer(1);
 
@@ -31,11 +31,9 @@ void CButtonThrobberUpdateable::UpdateResult(std::any in)
 
 void CButtonThrobberUpdateable::OnTimer(UINT nIDEvent)
 {
-  SetTimer(1, 500, nullptr);
-
-  dot = (dot % 3) + 1;
+  m_iDot = (m_iDot % 3) + 1;
   std::wstring str = L"Working";
-  str.append(dot,'.');
+  str.append(m_iDot,'.');
 
   SetWindowText(str.c_str());
 }
