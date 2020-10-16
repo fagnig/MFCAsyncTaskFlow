@@ -138,6 +138,8 @@ BOOL CMFCAsyncTaskFlowDlg::OnInitDialog()
 
   m_ctrlFileBrowse.EnableFileBrowseButton();
 
+  m_editSecondsToThink.SetWindowText(L"3");
+
   return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
