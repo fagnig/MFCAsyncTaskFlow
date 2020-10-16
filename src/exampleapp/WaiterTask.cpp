@@ -29,14 +29,7 @@ void WaiterTask::RunTask()
 
   m_updateables.GetProgressTarget("throbberbutton").UpdateProgress(1);
 
-  auto endtime = std::chrono::high_resolution_clock::now() + std::chrono::seconds(m_timetowait);
-
-  while ( std::chrono::high_resolution_clock::now() < endtime )
-  {
-    std::this_thread::sleep_for(0.5s);
-
-    m_updateables.GetProgressTarget("throbberbutton").UpdateProgress(1);
-  }
+  std::this_thread::sleep_for(std::chrono::seconds(m_timetowait));
 
   m_updateables.GetProgressTarget("throbberbutton").UpdateResult(1);
 

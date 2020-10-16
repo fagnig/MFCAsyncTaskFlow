@@ -3,19 +3,19 @@
 
 #include <string>
 
+BEGIN_MESSAGE_MAP(CButtonThrobberUpdateable, CButton)
+  ON_WM_TIMER()
+  MAKE_ASYNCUPDATEABLE_MSGMAP(CButtonThrobberUpdateable)
+END_MESSAGE_MAP()
+
+MAKE_ASYNCUPDATEABLE_FUNCS(CButtonThrobberUpdateable)
+
 void CButtonThrobberUpdateable::UpdateProgress(std::any in)
 {
-  const auto prog = std::any_cast<int>(in);
+  SetTimer(1, 500, nullptr);
 
   EnableWindow( false );
 
-  dot = (dot % 3) + 1;
-
-  std::wstring str = L"Working";
-
-  str.append(dot,'.');
-
-  SetWindowText(str.c_str());
 }
 
 void CButtonThrobberUpdateable::UpdateResult(std::any in) 
@@ -23,8 +23,19 @@ void CButtonThrobberUpdateable::UpdateResult(std::any in)
   EnableWindow( true );
 
   dot = 0;
+  
+  KillTimer(1);
 
   SetWindowText(L"Start");
 }
 
-MAKE_ASYNCUPDATEABLE(CButtonThrobberUpdateable, CButton)
+void CButtonThrobberUpdateable::OnTimer(UINT nIDEvent)
+{
+  SetTimer(1, 500, nullptr);
+
+  dot = (dot % 3) + 1;
+  std::wstring str = L"Working";
+  str.append(dot,'.');
+
+  SetWindowText(str.c_str());
+}

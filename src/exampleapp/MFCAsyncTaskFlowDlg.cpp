@@ -238,7 +238,6 @@ void CMFCAsyncTaskFlowDlg::OnGetMinMaxInfo(MINMAXINFO * lpMMI)
   lpMMI->ptMinTrackSize.y = m_iSizeMinY;
 }
 
-
 void CMFCAsyncTaskFlowDlg::OnBnClickedStartWait()
 {
   UpdateableContainer updateables;

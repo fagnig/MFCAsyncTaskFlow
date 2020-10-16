@@ -9,8 +9,11 @@ public:
 
   void UpdateResult(std::any in) override;
 
-  MAKE_ASYNCUPDATEABLE_HEADER()
+  DECLARE_MESSAGE_MAP()
+  MAKE_ASYNCUPDATEABLE_HEADER_NOMSGMAP()
 
+
+  afx_msg void OnTimer(UINT nIDEvent);
 private:
 
   int dot;
