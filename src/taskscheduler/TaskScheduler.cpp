@@ -25,6 +25,23 @@ void TaskScheduler::StopTask(std::string id)
   }
 }
 
+void TaskScheduler::SuspendTask(std::string id)
+{  
+  if( m_runningTasks.find(id) != m_runningTasks.end() )
+  {
+    m_runningTasks.at(id)->SuspendTask();
+  }
+}
+
+void TaskScheduler::ResumeTask(std::string id)
+{  
+  if( m_runningTasks.find(id) != m_runningTasks.end() )
+  {
+    m_runningTasks.at(id)->ResumeTask();
+  }
+}
+
+
 ITask::TaskStatus TaskScheduler::GetTaskStatus(std::string id)
 {
   if( m_runningTasks.find(id) != m_runningTasks.end() )

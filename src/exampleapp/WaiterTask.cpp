@@ -39,12 +39,22 @@ void WaiterTask::RunTask()
   m_status = TaskStatus::FINISHED;
 }
 
-void WaiterTask::StopTask()
+void WaiterTask::OnStopping()
 {
   //Log(LogType::Error, "WaiterTask doesn't support stopping");
 }
 
-void WaiterTask::HaltTask()
+void WaiterTask::OnStopped()
 {
-  //Log(LogType::Error, "WaiterTask doesn't support halting");
+  //Log(LogType::Error, "WaiterTask doesn't support stopping");
+}
+
+void WaiterTask::OnSuspend()
+{
+  //Log(LogType::Error, "WaiterTask doesn't support suspending");
+}
+
+void WaiterTask::OnResume()
+{
+  //Log(LogType::Error, "WaiterTask doesn't support resuming");
 }

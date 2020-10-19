@@ -194,10 +194,14 @@ HCURSOR CMFCAsyncTaskFlowDlg::OnQueryDragIcon()
 
 void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
 {
-  if( g_globalTaskManager.GetTaskStatus("worker") == ITask::TaskStatus::RUNNING )
+  switch( g_globalTaskManager.GetTaskStatus("worker") )
   {
-    g_globalTaskManager.StopTask("worker");
-    return;
+    case ITask::TaskStatus::RUNNING:
+      g_globalTaskManager.SuspendTask("worker");
+      return;
+    case ITask::TaskStatus::SUSPENDED:
+      g_globalTaskManager.ResumeTask("worker");
+      return;
   }
 
   m_listLog.DeleteAllItems();

@@ -34,37 +34,32 @@ void WordCounterTask::RunTask()
   int curline = 0;
   int linecount = 0;
 
-  std::ifstream s;
-  s.open(m_filepath, std::ifstream::in);
+  m_ifstream.open(m_filepath, std::ifstream::in);
 
-  if( s.is_open() )
+  if( m_ifstream.is_open() )
   {
     std::string line;
-    std::getline(s, line);
+    std::getline(m_ifstream, line);
     const auto firstlinelen = line.length();
-    s.seekg(0);
+    m_ifstream.seekg(0);
 
     const auto fsize = std::filesystem::file_size(m_filepath);
     const auto approxlines = fsize/firstlinelen;
 
 
-    while(!s.eof()) {
+    while(!m_ifstream.eof()) {
       std::string dummy;
-      std::getline(s, dummy);
+      std::getline(m_ifstream, dummy);
       ++linecount;
       if( linecount % 5000 == 0 ){
         for( auto [id, pack] : m_updateables )
           if( id!="listlog" )
             pack.UpdateProgress((int)((linecount/(double)approxlines)*30));
 
-        std::this_thread::sleep_for(50ms); // Intentional delay to emphasise the UI updates
+        std::this_thread::sleep_for(50ms); // Intentional delay to pad runtime and emphasise the UI updates
 
-        if( m_stoptoken )
-        {
-          s.close();
-          StopAndCleanup();
-          return;
-        }
+        StopPoint();
+        SuspendPoint();
       }
     }
 
@@ -72,31 +67,23 @@ void WordCounterTask::RunTask()
     std::wstring wstr = ATL::CA2W(str.c_str());
     m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
 
-    if( m_stoptoken )
-    {
-      s.close();
-      StopAndCleanup();
-      return;
-    }
+    StopPoint();
+    SuspendPoint();
 
-    s.clear();
-    s.seekg(0);
+    m_ifstream.clear();
+    m_ifstream.seekg(0);
 
-    while( std::getline(s, line) ){
+    while( std::getline(m_ifstream, line) ){
       ++curline;
       size_t pos = 0;
       while( (pos = line.find(m_wordtofind, pos+1)) != std::string::npos )
         wordsfound++;
 
       if( curline % 200 == 0 ){
-        std::this_thread::sleep_for(50ms); // Intentional delay to emphasise the UI updates
+        std::this_thread::sleep_for(50ms); // Intentional delay to pad runtime and emphasise the UI updates
 
-        if( m_stoptoken )
-        {
-          s.close();
-          StopAndCleanup();
-          return;
-        }
+        StopPoint();
+        SuspendPoint();
 
         for( auto [id, pack] : m_updateables ){
           if( id!="listlog" )
@@ -114,19 +101,6 @@ void WordCounterTask::RunTask()
     }
   }
 
-  s.close();
-
-  while( SHOULDTHREADHANG )
-  {
-    if( m_stoptoken )
-    {
-      StopAndCleanup();
-      return;
-    }
-    std::this_thread::sleep_for(1s);
-  }
-
-
   for( auto ctrl : m_updateables.GetProgressTargetByType("textual"))
   {
     std::string str = fmt::format("Found {} instances of the word '{}' in '{}', searched {} lines.", wordsfound, m_wordtofind, m_filepath.string(), linecount);
@@ -138,25 +112,36 @@ void WordCounterTask::RunTask()
     ctrl.UpdateResult(wordsfound);
   }
 
+  m_ifstream.close();
+
   m_status = TaskStatus::FINISHED;
 }
 
-void WordCounterTask::StopTask()
+void WordCounterTask::OnStopping()
 {
-  m_stoptoken = true;
-  m_status = TaskStatus::STOPPING;
+  
   std::string str = "Stopping search...";
+  std::wstring wstr = ATL::CA2W(str.c_str());
+  m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
+
+
+}
+
+void WordCounterTask::OnSuspend()
+{
+  std::string str = "Word counting has been suspended...";
   std::wstring wstr = ATL::CA2W(str.c_str());
   m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
 }
 
-void WordCounterTask::HaltTask()
+void WordCounterTask::OnResume()
 {
-  //Log(LogType::Error, "WordCounterTask doesn't support halting");
+  std::string str = "Word counting has been resumed...";
+  std::wstring wstr = ATL::CA2W(str.c_str());
+  m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
 }
 
-
-void WordCounterTask::StopAndCleanup()
+void WordCounterTask::OnStopped()
 {
   m_status = TaskStatus::STOPPED;
   std::string str = fmt::format("Stopped searching for the word '{}'.", m_wordtofind);
@@ -168,4 +153,6 @@ void WordCounterTask::StopAndCleanup()
   }
   
   m_stoptoken = false;
+
+  m_ifstream.close();
 }

@@ -15,9 +15,11 @@ public:
   WaiterTask(int timetowait ,UpdateableContainer updateables):
     m_timetowait(timetowait), m_updateables(updateables) {};
 
-  void RunTask()  override;
-  void StopTask() override;
-  void HaltTask() override;
+  void RunTask()    override;
+  void OnSuspend()  override;
+  void OnResume()   override;
+  void OnStopping() override;
+  void OnStopped()  override;
 
   int                   m_timetowait;
   UpdateableContainer   m_updateables;

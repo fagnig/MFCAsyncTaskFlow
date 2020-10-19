@@ -21,4 +21,3 @@ private:
 
   bool m_bProgressDisable{true};
 };
-

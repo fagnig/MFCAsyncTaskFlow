@@ -29,6 +29,8 @@ class TaskScheduler
 
   void AddTask(std::string id, std::shared_ptr<ITask> task);
   void StopTask(std::string id);
+  void SuspendTask(std::string id);
+  void ResumeTask(std::string id);
   ITask::TaskStatus GetTaskStatus(std::string id);
 
   // Should be called at the end of the program; will stop all tasks and attempt to join them
