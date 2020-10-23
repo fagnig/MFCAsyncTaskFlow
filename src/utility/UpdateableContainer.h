@@ -7,8 +7,6 @@
 class UpdateableContainer
 {
  public:
-  using PrUpPtr = IAsyncProgressUpdateable *;
-
   /// Internal type used for asynchronously updating
   struct StorageType
   {
@@ -81,5 +79,5 @@ class UpdateableContainer
   }
 
  private:
-  std::unordered_map<std::string, StorageType> m_internalMap;
+  std::unordered_map<std::string, StorageType> m_internalMap; 
 };
