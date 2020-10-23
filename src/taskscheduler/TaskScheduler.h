@@ -11,29 +11,26 @@
 #include "utility/UpdateableContainer.h"
 #include "interface/ITask.h"
 
-
-/// <summary>
-/// Global task scheduler
-/// Operates on a thread-pool basis, with a number of threads contained in a pool (m_threadPool) 
-/// running a spinner-type function until a task is pushed into the queue (m_taskQueue),
+/// @brief Global task scheduler \n
+/// Operates on a thread-pool basis, with a number of threads contained in a pool (m_threadPool), \n
+/// running a spinner-type function until a task is pushed into the queue (m_taskQueue), \n
 /// whereafter the thread will add the task to the map of running tasks (m_runningTasks)
-/// 
-/// </summary>
 class TaskScheduler
 {
  public:
+  /// @brief Internal type for storage in the Queue
   using QueueTuple = std::tuple<std::string, std::shared_ptr<ITask>>;
 
   TaskScheduler();
   ~TaskScheduler();
 
-  void AddTask(std::string id, std::shared_ptr<ITask> task);
+  void EnqueueTask(std::string id, std::shared_ptr<ITask> task);
   void StopTask(std::string id);
   void SuspendTask(std::string id);
   void ResumeTask(std::string id);
   ITask::TaskStatus GetTaskStatus(std::string id);
 
-  // Should be called at the end of the program; will stop all tasks and attempt to join them
+  /// @brief Function to cleanly exit - Should be called at the end of the program; will stop all tasks and attempt to join them
   void ShutdownScheduler();
 
  private:

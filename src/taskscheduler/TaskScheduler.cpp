@@ -5,18 +5,19 @@
 #include "TaskScheduler.h"
 #include <thread>
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="id">String identifier</param>
-/// <param name="task">Shared ptr to an object implementing an ITask interface</param>
-void TaskScheduler::AddTask(std::string id, std::shared_ptr<ITask> task)
+
+/// @brief Queues a task for being run by the worker threads
+/// @param id String identifier to associate task with. To be used for accessing the task later.
+/// @param task Shared ptr to an object implementing the ITask interface
+void TaskScheduler::EnqueueTask(std::string id, std::shared_ptr<ITask> task)
 {
   m_taskQueue.push({id, task});
 
   m_condition.notify_all();
 }
 
+/// @brief Stops a running task
+/// @param id String identifier to search the running tasks for.
 void TaskScheduler::StopTask(std::string id)
 {  
   if( m_runningTasks.find(id) != m_runningTasks.end() )
@@ -25,6 +26,8 @@ void TaskScheduler::StopTask(std::string id)
   }
 }
 
+/// @brief Suspends a running task
+/// @param id String identifier to search the running tasks for.
 void TaskScheduler::SuspendTask(std::string id)
 {  
   if( m_runningTasks.find(id) != m_runningTasks.end() )
@@ -33,6 +36,8 @@ void TaskScheduler::SuspendTask(std::string id)
   }
 }
 
+/// @brief Resumes a suspended task
+/// @param id String identifier to search the running tasks for.
 void TaskScheduler::ResumeTask(std::string id)
 {  
   if( m_runningTasks.find(id) != m_runningTasks.end() )
@@ -41,7 +46,9 @@ void TaskScheduler::ResumeTask(std::string id)
   }
 }
 
-
+/// @brief Gets the status of a running task
+/// @param id String identifier to search the running tasks for.
+/// @return The status of the task as a TaskStatus enum, or ITask::TaskStatus::NO_SUCH_TASK if task was not found.
 ITask::TaskStatus TaskScheduler::GetTaskStatus(std::string id)
 {
   if( m_runningTasks.find(id) != m_runningTasks.end() )
@@ -94,6 +101,7 @@ void TaskScheduler::TaskSpinner()
   }
 }
 
+/// @brief Shuts down the scheduler, should be called before program shutdown.
 void TaskScheduler::ShutdownScheduler()
 {
   //Kill all idle spinners

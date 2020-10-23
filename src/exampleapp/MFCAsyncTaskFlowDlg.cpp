@@ -231,7 +231,7 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
   std::string wordtofind = CT2A(wordtofindbuf);
 
   auto taskptr = std::make_shared<WordCounterTask>(wordtofind, filepath, updateables);
-  g_globalTaskManager.AddTask("worker", taskptr);
+  g_globalTaskManager.EnqueueTask("worker", taskptr);
   
   std::string str = fmt::format("Started searching '{}' for the word '{}'.", filepath.string(), wordtofind);
   std::wstring wstr = ATL::CA2W(str.c_str());
@@ -255,7 +255,7 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWait()
   int waittime = _ttoi(waittimebuf);
 
   auto taskptr = std::make_shared<WaiterTask>(waittime,updateables);
-  g_globalTaskManager.AddTask("waiter", taskptr);
+  g_globalTaskManager.EnqueueTask("waiter", taskptr);
 
   m_buttonStartWait.UpdateProgress(1);
 

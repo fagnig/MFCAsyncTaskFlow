@@ -23,9 +23,6 @@
 
 using namespace std::chrono_literals;
 
-// Set to true to have the thread hang forever to test task cancellation
-constexpr bool SHOULDTHREADHANG = false;
-
 void WordCounterTask::RunTask()
 {
   m_status = TaskStatus::RUNNING;
@@ -46,7 +43,6 @@ void WordCounterTask::RunTask()
     const auto fsize = std::filesystem::file_size(m_filepath);
     const auto approxlines = fsize/firstlinelen;
 
-
     while(!m_ifstream.eof()) {
       std::string dummy;
       std::getline(m_ifstream, dummy);
@@ -58,7 +54,7 @@ void WordCounterTask::RunTask()
 
         std::this_thread::sleep_for(50ms); // Intentional delay to pad runtime and emphasise the UI updates
 
-        StopPoint();
+        if(StopPoint()) return;
         SuspendPoint();
       }
     }
@@ -67,7 +63,7 @@ void WordCounterTask::RunTask()
     std::wstring wstr = ATL::CA2W(str.c_str());
     m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
 
-    StopPoint();
+    if(StopPoint()) return;
     SuspendPoint();
 
     m_ifstream.clear();
@@ -82,7 +78,7 @@ void WordCounterTask::RunTask()
       if( curline % 200 == 0 ){
         std::this_thread::sleep_for(50ms); // Intentional delay to pad runtime and emphasise the UI updates
 
-        StopPoint();
+        if(StopPoint()) return;
         SuspendPoint();
 
         for( auto [id, pack] : m_updateables ){
@@ -123,7 +119,6 @@ void WordCounterTask::OnStopping()
   std::string str = "Stopping search...";
   std::wstring wstr = ATL::CA2W(str.c_str());
   m_updateables.GetProgressTarget("listlog").UpdateResult(wstr);
-
 
 }
 
