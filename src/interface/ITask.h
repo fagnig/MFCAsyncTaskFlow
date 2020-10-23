@@ -8,6 +8,25 @@
 #include <mutex>
 #include "utility/UpdateableContainer.h"
 
+
+/// \mainpage Index
+/// 
+/// \section intro_sec Introduction
+/// 
+/// This is the documentation for the MFC Async Taskflow project. \n
+/// See *LINK TO REPORT HERE* for a more detailed report of the project. \n
+/// 
+/// \section class_sec Classes of interest
+///   Below is a list of classes that constitute the main part of the project, whereas the rest are mostly prototype and implementation.
+/// 
+///   - ITask
+///   - IAsyncProgressUpdateable.h
+///   - TaskScheduler
+///   - UpdateableContainer
+/// 
+
+
+
 /// Interface for implementing a task \n
 /// The implementing class should make sure all data needed is kept alive through eg. std::shared_ptr's.
 
@@ -37,19 +56,14 @@ class ITask
   /// Once this function terminates, the task is finished, and will be freed from the internal map of the TaskScheduler,
   /// and the thread in the threadpool will be free to start another task.
   virtual void RunTask()      = 0; 
-
-  /// @brief Function to run when suspending ; can be used for updating ui to notify user of a resumed task
-  virtual void OnSuspend()    = 0; 
-  /// @brief Function to run when resuming ; can be used for updating ui to notify user of a resumed task
-  virtual void OnResume()     = 0; 
-  /// @brief  Function to run when stopping ; can be used for reporting stopping if cleanup could take a while
-  virtual void OnStopping()   = 0; 
-  /// @brief  Function to run when task is completely stopped ; can be used for updating/resetting ui
-  virtual void OnStopped()    = 0; 
+  virtual void OnSuspend()    = 0; ///< @brief Function to run when suspending ; can be used for updating ui to notify user of a resumed task
+  virtual void OnResume()     = 0; ///< @brief Function to run when resuming ; can be used for updating ui to notify user of a resumed task
+  virtual void OnStopping()   = 0; ///< @brief Function to run when stopping ; can be used for reporting stopping if cleanup could take a while
+  virtual void OnStopped()    = 0; ///< @brief Function to run when task is completely stopped ; can be used for updating/resetting ui
   ///@}
 
 
-  /// @name Internals
+  /// @name Execution Control
   ///@{ 
 
   /// @brief Stops the task - Sets the status to TaskStatus::STOPPING and m_stoptoken to true. \n
@@ -79,6 +93,9 @@ class ITask
   }
   ///@}
 
+  /// @name Flow Control
+  /// @{ 
+  
   /// @brief To be called by the RunTask() implementation to denote a point where stopping is possible.
   /// @return True if the function should stop running, false if not. 
   bool StopPoint() {
@@ -105,7 +122,8 @@ class ITask
       m_status = TaskStatus::RUNNING;
     }
   }
-
+  ///@}
+  
  protected:
   /// @brief A collection of updateable controls - used for updating user interface asynchronously 
   UpdateableContainer     m_updateables; 

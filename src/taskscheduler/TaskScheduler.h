@@ -18,7 +18,7 @@
 class TaskScheduler
 {
  public:
-  /// @brief Internal type for storage in the Queue
+  /// @brief Internal type for storage in the Task Queue
   using QueueTuple = std::tuple<std::string, std::shared_ptr<ITask>>;
 
   TaskScheduler();
@@ -30,7 +30,8 @@ class TaskScheduler
   void ResumeTask(std::string id);
   ITask::TaskStatus GetTaskStatus(std::string id);
 
-  /// @brief Function to cleanly exit - Should be called at the end of the program; will stop all tasks and attempt to join them
+  /// @brief Function to cleanly exit - Should be called at the end of the program; will stop all tasks and attempt to join them \n
+  /// Is also automatically called by the destructor
   void ShutdownScheduler();
 
  private:
