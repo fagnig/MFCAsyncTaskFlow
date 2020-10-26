@@ -35,8 +35,6 @@ public:
 
 };
 
-
-
 #define MAKE_ASYNCUPDATEABLE_MSGMAP(t)                                          \
     ON_MESSAGE( ASYNCUPDATEPROGRESS_MESSAGE, &t::UpdateProgressMessage )        \
     ON_MESSAGE( ASYNCUPDATERESULT_MESSAGE, &t::UpdateResultMessage )            \
