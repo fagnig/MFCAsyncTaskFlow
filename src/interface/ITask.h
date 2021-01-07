@@ -14,7 +14,7 @@
 /// \section intro_sec Introduction
 /// 
 /// This is the documentation for the MFC Async Taskflow project. \n
-/// See *LINK TO REPORT HERE* for a more detailed report of the project. \n
+/// See report of the project for better, less technical overview. \n
 /// 
 /// \section class_sec Classes of interest
 ///   Below is a list of classes that constitute the main part of the project, whereas the rest are mostly prototype and implementation.

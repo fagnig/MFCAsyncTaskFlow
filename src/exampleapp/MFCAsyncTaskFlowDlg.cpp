@@ -30,42 +30,7 @@
 
 using namespace std::chrono_literals;
 
-// CAboutDlg dialog used for App About
-
-class CAboutDlg : public CDialogEx
-{
-public:
-  CAboutDlg();
-
-// Dialog Data
-#ifdef AFX_DESIGN_TIME
-  enum { IDD = IDD_ABOUTBOX };
-#endif
-
-  protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-
-// Implementation
-protected:
-  DECLARE_MESSAGE_MAP()
-};
-
-CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
-{
-}
-
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
-{
-  CDialogEx::DoDataExchange(pDX);
-}
-
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
-END_MESSAGE_MAP()
-
-
 // CMFCAsyncTaskFlowDlg dialog
-
-
 
 CMFCAsyncTaskFlowDlg::CMFCAsyncTaskFlowDlg(CWnd* pParent /*=nullptr*/)
   : CDialogEx(IDD_MFCASYNCTASKFLOW_DIALOG, pParent)
@@ -103,26 +68,6 @@ BOOL CMFCAsyncTaskFlowDlg::OnInitDialog()
 {
   CDialogEx::OnInitDialog();
 
-  // Add "About..." menu item to system menu.
-
-  // IDM_ABOUTBOX must be in the system command range.
-  ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-  ASSERT(IDM_ABOUTBOX < 0xF000);
-
-  CMenu* pSysMenu = GetSystemMenu(FALSE);
-  if( pSysMenu != nullptr )
-  {
-    BOOL bNameValid;
-    CString strAboutMenu;
-    bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
-    ASSERT(bNameValid);
-    if( !strAboutMenu.IsEmpty() )
-    {
-      pSysMenu->AppendMenu(MF_SEPARATOR);
-      pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
-    }
-  }
-
   // Set the icon for this dialog.  The framework does this automatically
   //  when the application's main window is not a dialog
   SetIcon(m_hIcon, TRUE);      // Set big icon
@@ -141,19 +86,6 @@ BOOL CMFCAsyncTaskFlowDlg::OnInitDialog()
   m_editSecondsToThink.SetWindowText(L"3");
 
   return TRUE;  // return TRUE  unless you set the focus to a control
-}
-
-void CMFCAsyncTaskFlowDlg::OnSysCommand(UINT nID, LPARAM lParam)
-{
-  if( (nID & 0xFFF0) == IDM_ABOUTBOX )
-  {
-    CAboutDlg dlgAbout;
-    dlgAbout.DoModal();
-  }
-  else
-  {
-    CDialogEx::OnSysCommand(nID, lParam);
-  }
 }
 
 // If you add a minimize button to your dialog, you will need the code below
@@ -228,13 +160,13 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWork()
 
   CString wordtofindbuf;
   m_editWordToFind.GetWindowText(wordtofindbuf);
-  std::string wordtofind = CT2A(wordtofindbuf);
+  std::string wordtofind = (std::string)ATL::CT2A(wordtofindbuf);
 
   auto taskptr = std::make_shared<WordCounterTask>(wordtofind, filepath, updateables);
   g_globalTaskManager.EnqueueTask("worker", taskptr);
   
   std::string str = fmt::format("Started searching '{}' for the word '{}'.", filepath.string(), wordtofind);
-  std::wstring wstr = ATL::CA2W(str.c_str());
+  std::wstring wstr = (std::wstring)ATL::CA2W(str.c_str());
   m_listLog.UpdateProgress(wstr);
 }
 
@@ -260,6 +192,6 @@ void CMFCAsyncTaskFlowDlg::OnBnClickedStartWait()
   m_buttonStartWait.UpdateProgress(1);
 
   std::string str = fmt::format("Asynchronously waiting for {} seconds.", waittime);
-  std::wstring wstr = ATL::CA2W(str.c_str());
+  std::wstring wstr = (std::wstring)ATL::CA2W(str.c_str());
   m_listLog.UpdateProgress(wstr);
 }

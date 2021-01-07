@@ -44,7 +44,6 @@ protected:
   virtual BOOL            OnInitDialog() override;
 
   // Message map functions
-  afx_msg void            OnSysCommand(UINT nID, LPARAM lParam);
   afx_msg void            OnPaint();
   afx_msg HCURSOR         OnQueryDragIcon();
   afx_msg void            OnGetMinMaxInfo(MINMAXINFO * lpMMI);
