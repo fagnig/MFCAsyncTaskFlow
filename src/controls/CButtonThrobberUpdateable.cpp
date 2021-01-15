@@ -29,7 +29,7 @@ void CButtonThrobberUpdateable::UpdateResult(std::any in)
   SetWindowText(L"Start");
 }
 
-void CButtonThrobberUpdateable::OnTimer(UINT nIDEvent)
+void CButtonThrobberUpdateable::OnTimer(UINT_PTR nIDEvent)
 {
   m_iDot = (m_iDot % 3) + 1;
   std::wstring str = L"Working";

@@ -14,7 +14,7 @@ public:
 
   void SetProgressDisable(bool disable) { m_bProgressDisable = disable; }
 
-  afx_msg void OnTimer(UINT nIDEvent);
+  afx_msg void OnTimer(UINT_PTR nIDEvent);
 private:
 
   int m_iDot;
